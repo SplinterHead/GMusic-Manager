@@ -53,13 +53,17 @@ def addSong(title, artist, album):
                (title,findAlbumId(album),findArtistId(artist),))
     conn.commit()
 
-def findSong():
+def allSongs():
     db.execute('SELECT * FROM songs')
     return db.fetchall()
 
-createTables()
-addSong('Hello', 'Adele', '25')
-library = findSong()
-for song in library:
-    print '|' + str(song[0]) + '|' + str(song[1]) + '|' + str(song[2]) + '|' + str(song[3]) + '|'
+def lookupAlbum(album_id):
+    db.execute('SELECT title FROM albums WHERE ID = ' + str(album_id))
+    return db.fetchone()[0]
 
+def lookupArtist(artist_id):
+    db.execute('SELECT name FROM artists WHERE ID = ' + str(artist_id))
+    return db.fetchone()[0]
+
+# Create the database tabled when the app is initially run
+createTables()
