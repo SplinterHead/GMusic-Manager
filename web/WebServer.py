@@ -19,9 +19,10 @@ def generateReport():
     report.write('<tr><td><b>Title</b></td><td><b>Artist</b></td><td><b>Album</b></td></tr>')
     for song in DB.allSongs():
         SONG_ID = song[0]
-        SONG_TITLE = song[1].encode('utf-8').strip()
-        ARTIST_NAME = DB.lookupArtist(song[2])
-        ALBUM_TITLE = DB.lookupAlbum(song[3])
+        SONG_GOOGLE_ID = song[1]
+        SONG_TITLE = song[2].encode('utf-8').strip()
+        ARTIST_NAME = DB.lookupArtist(song[3])
+        ALBUM_TITLE = DB.lookupAlbum(song[4])
         report.write('<tr><td>' + SONG_TITLE + '</td><td>' + ARTIST_NAME + '</td><td>' + ALBUM_TITLE + '</td></tr>')
     report.write('</table></body></html>')
     report.close()

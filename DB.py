@@ -9,48 +9,57 @@ def createTables():
     ## Artists
     db.execute ('''CREATE TABLE artists (
     ID INTEGER PRIMARY KEY,
-    NAME TEXT
+    G_ID TEXT,
+    NAME TEXT,
+    ART_URL TEXT
     )''')
 
     ## Albums
     db.execute ('''CREATE TABLE albums (
     ID INTEGER PRIMARY KEY,
+    G_ID TEXT,
     TITLE TEXT,
-    ARTIST_ID INTEGER
+    ARTIST_ID INTEGER,
+    ART_URL TEXT,
+    DISC_CNT INT,
+    TRACK_CNT INT
     )''') #, cover_url, cover_width, cover_height, discs int)''' )
 
     ## Songs
     db.execute ('''CREATE TABLE songs (
     ID INTEGER PRIMARY KEY,
+    G_ID TEXT,
     TITLE TEXT,
     ALBUM_ID INTEGER,
     ARTIST_ID INTEGER
     )''')
     conn.commit()
 
-def findArtistId(artistName):
+def findArtistId(artistName, gId, artworkUrl):
     db.execute("SELECT ID FROM artists WHERE NAME = ?",(artistName,))
     artist_id = db.fetchone()
     if artist_id is None:
-        db.execute('INSERT INTO artists (NAME) VALUES (?)',(artistName,))
+        db.execute('INSERT INTO artists (G_ID, NAME, ART_URL) VALUES (?,?,?)',
+                   (gId,artistName,artworkUrl,))
         conn.commit()
         return db.lastrowid
     else:
         return artist_id[0]
 
-def findAlbumId(albumName):
+def findAlbumId(albumName, artistId, gId, artworkUrl):
     db.execute("SELECT ID FROM albums WHERE TITLE = ?",(albumName,))
     album_id = db.fetchone()
     if album_id is None:
-        db.execute('INSERT INTO albums (TITLE) VALUES (?)',(albumName,))
+        db.execute('INSERT INTO albums (G_ID, TITLE, ARTIST_ID, ART_URL) VALUES (?,?,?,?)',
+                   (gId,artistId,albumName,artworkUrl,))
         conn.commit()
         return db.lastrowid
     else:
         return album_id[0]
 
-def addSong(title, artist, album):
-    db.execute('INSERT INTO songs (TITLE, ALBUM_ID, ARTIST_ID) VALUES (?,?,?)',
-               (title,findAlbumId(album),findArtistId(artist),))
+def addSong(title, gId, artistId, albumId):
+    db.execute('INSERT INTO songs (TITLE, G_ID, ALBUM_ID, ARTIST_ID) VALUES (?,?,?,?)',
+               (title,gId,albumId,artistId))
     conn.commit()
 
 def allSongs():
@@ -61,8 +70,16 @@ def lookupAlbum(album_id):
     db.execute('SELECT title FROM albums WHERE ID = ' + str(album_id))
     return db.fetchone()[0]
 
+def lookupAlbumArt(album_id):
+    db.execute('SELECT art_url FROM albums WHERE ID = ' + str(album_id))
+    return db.fetchone()[0]
+
 def lookupArtist(artist_id):
     db.execute('SELECT name FROM artists WHERE ID = ' + str(artist_id))
+    return db.fetchone()[0]
+
+def lookupArtistArt(artist_id):
+    db.execute('SELECT art_url FROM artists WHERE ID = ' + str(artist_id))
     return db.fetchone()[0]
 
 # Create the database tabled when the app is initially run

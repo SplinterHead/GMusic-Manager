@@ -6,6 +6,7 @@ import shutil
 import gmusicapi
 # Local Libraries
 import DB
+import DataFarmer
 import web.WebServer as webServer
 
 # Step 1: Log into GMusic
@@ -26,7 +27,7 @@ print "done"
 ## Load all songs into the manager database
 print "Storing song data in database"
 for song in songs:
-    DB.addSong(song['title'], song['artist'], song['album'])
+    DataFarmer.load(song)
 print "complete"
 
 print "Writing report"
