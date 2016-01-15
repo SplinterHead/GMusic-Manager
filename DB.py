@@ -42,7 +42,9 @@ def findArtistId(artistName, gId, artworkUrl):
         db.execute('INSERT INTO artists (G_ID, NAME, ART_URL) VALUES (?,?,?)',
                    (gId,artistName,artworkUrl,))
         conn.commit()
-        return db.lastrowid
+        db.execute('SELECT last_insert_rowid()')
+        conn.commit()
+        return db.fetchone()[0]
     else:
         return artist_id[0]
 
@@ -51,15 +53,17 @@ def findAlbumId(albumName, artistId, gId, artworkUrl):
     album_id = db.fetchone()
     if album_id is None:
         db.execute('INSERT INTO albums (G_ID, TITLE, ARTIST_ID, ART_URL) VALUES (?,?,?,?)',
-                   (gId,artistId,albumName,artworkUrl,))
+                   (gId,albumName,artistId,artworkUrl,))
         conn.commit()
-        return db.lastrowid
+        db.execute('SELECT last_insert_rowid()')
+        conn.commit()
+        return db.fetchone()[0]
     else:
         return album_id[0]
 
-def addSong(title, gId, artistId, albumId):
-    db.execute('INSERT INTO songs (TITLE, G_ID, ALBUM_ID, ARTIST_ID) VALUES (?,?,?,?)',
-               (title,gId,albumId,artistId))
+def addSong(gId, title, albumId, artistId):
+    db.execute('INSERT INTO songs (G_ID, TITLE, ALBUM_ID, ARTIST_ID) VALUES (?,?,?,?)',
+               (gId,title,albumId,artistId))
     conn.commit()
 
 def allSongs():
@@ -68,19 +72,31 @@ def allSongs():
 
 def lookupAlbum(album_id):
     db.execute('SELECT title FROM albums WHERE ID = ' + str(album_id))
-    return db.fetchone()[0]
+    if db.rowcount > 0:
+        return db.fetchone()[0]
+    else:
+        return str(db.fetchone())
 
 def lookupAlbumArt(album_id):
     db.execute('SELECT art_url FROM albums WHERE ID = ' + str(album_id))
-    return db.fetchone()[0]
+    if db.rowcount > 0:
+        return db.fetchone()[0]
+    else:
+        return str(db.fetchone())
 
 def lookupArtist(artist_id):
     db.execute('SELECT name FROM artists WHERE ID = ' + str(artist_id))
-    return db.fetchone()[0]
+    if db.rowcount > 0:
+        return db.fetchone()[0]
+    else:
+        return str(db.fetchone())
 
 def lookupArtistArt(artist_id):
     db.execute('SELECT art_url FROM artists WHERE ID = ' + str(artist_id))
-    return db.fetchone()[0]
+    if db.rowcount > 0:
+        return db.fetchone()[0]
+    else:
+        return str(db.fetchone())
 
 # Create the database tabled when the app is initially run
 createTables()
