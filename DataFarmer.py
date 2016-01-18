@@ -50,36 +50,29 @@ def load(song):
 
     print song
     # Step 1: Add the artist / Find the artist in the DB and collect their ID
-    songArtist = repr(song['artist']) or 'NULL'
+    songArtist = song['artist'] or 'NULL'
     songArtistId = 'NULL'
     songArtistArt = 'NULL'
 
     if 'artistId' in song:
-        songArtistId = repr(song['artistId'][0]) or 'NULL'
+        songArtistId = song['artistId'][0] or 'NULL'
     if 'artistArtRef' in song:
-        songArtistArt = repr(song['artistArtRef'][0]['url']) or 'NULL'
-    artistPyId = DB.findArtistId(songArtist,songArtistId,songArtistArt)
-    message = "Artist: " + songArtist + "(" + str(artistPyId) + "), "
+        songArtistArt = song['artistArtRef'][0]['url'] or 'NULL'
+    artistPyId = DB.findArtistId(songArtist, songArtistId, songArtistArt)
 
     # Using this internal ID, assign the album (or find the current ID if already exists)
-    songAlbum = repr(song['album']) or 'NULL'
+    songAlbum = song['album'] or 'NULL'
     songAlbumId = 'NULL'
     songAlbumArt = 'NULL'
 
     if 'albumId' in song:
-        songAlbumId = repr(song['albumId']) or 'NULL'
+        songAlbumId = song['albumId'] or 'NULL'
     if 'albumArtRef' in song:
-        songAlbumArt = repr(song['albumArtRef'][0]['url']) or 'NULL'
-    albumPyId = DB.findAlbumId(songAlbum,artistPyId,songAlbumId,songAlbumArt)
-    message += "Album: " + songAlbum + "(" + str(albumPyId) + "), "
+        songAlbumArt = song['albumArtRef'][0]['url'] or 'NULL'
+    albumPyId = DB.findAlbumId(songAlbum, artistPyId, songAlbumId, songAlbumArt)
 
     # Finally, add the song itself to the DB
-    songTitle = repr(song['title']) or 'NULL'
-    songId = repr(song['id']) or 'NULL'
-    #print "Storing song "+ songTitle + "(" + songId+ ") artist:"+ artistPyId + " album:" + albumPyId
-    message += "Song: " + songTitle
-    DB.addSong(songId,songTitle,albumPyId,artistPyId)
-
-    print message
-    print "============================================"
+    songTitle = song['title'] or 'NULL'
+    songId = song['id'] or 'NULL'
+    DB.addSong(songId, songTitle, albumPyId, artistPyId)
 

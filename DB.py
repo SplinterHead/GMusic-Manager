@@ -72,31 +72,19 @@ def allSongs():
 
 def lookupAlbum(album_id):
     db.execute('SELECT title FROM albums WHERE ID = ' + str(album_id))
-    if db.rowcount > 0:
-        return db.fetchone()[0]
-    else:
-        return str(db.fetchone())
+    return db.fetchone()[0] or None
 
 def lookupAlbumArt(album_id):
     db.execute('SELECT art_url FROM albums WHERE ID = ' + str(album_id))
-    if db.rowcount > 0:
-        return db.fetchone()[0]
-    else:
-        return str(db.fetchone())
+    return db.fetchone()[0] or None
 
 def lookupArtist(artist_id):
     db.execute('SELECT name FROM artists WHERE ID = ' + str(artist_id))
-    if db.rowcount > 0:
-        return db.fetchone()[0]
-    else:
-        return str(db.fetchone())
+    return db.fetchone()[0] or None
 
 def lookupArtistArt(artist_id):
     db.execute('SELECT art_url FROM artists WHERE ID = ' + str(artist_id))
-    if db.rowcount > 0:
-        return db.fetchone()[0]
-    else:
-        return str(db.fetchone())
+    return db.fetchone()[0] or None
 
 # Create the database tabled when the app is initially run
 createTables()
