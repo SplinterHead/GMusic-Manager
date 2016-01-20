@@ -19,3 +19,13 @@ Automates some annoying things with Google Music.
 * Downloads high-quality artwork
 * Combines discs and adds metadata
 * Attempts to fill in missing metadata
+
+
+Dependencies
+============
+
+Like the project, this section will probably grow
+* Simon Weber's gmusicapi
+ * https://github.com/simon-weber/gmusicapi
+* Python Imaging Library (PIL)
+ * http://www.pythonware.com/products/pil/

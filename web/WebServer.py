@@ -1,8 +1,10 @@
 __author__ = 'Lewis England'
 
 import DB
+import urllib
 import SocketServer
 import SimpleHTTPServer
+from PIL import Image
 
 PORT = 8000
 REPORT_FILE = "index.html"
@@ -20,17 +22,38 @@ def initialise():
     print "serving at port", PORT
     httpd.serve_forever()
 
+def getDimensions(song_hash, image):
+    local_filename = "covers/" + song_hash + ".jpeg"
+    resource = urllib.urlopen(image)
+    output = open(local_filename,"wb")
+    output.write(resource.read())
+    output.close()
+    #img = Image.open(local_filename)
+    # get the image's width and height in pixels
+    #width, height = img.size
+    return [100, 100]
+
 def generateReport():
     report = open(REPORT_FILE, 'w')
-    report.write('<html><body><table border="1"><tr><th colspan="3">GMusic Manager Report</th></tr>')
-    report.write('<tr><td><b>Title</b></td><td><b>Artist</b></td><td><b>Album</b></td></tr>')
+    report.write('<html><body><table border="1"><tr><th colspan="4">GMusic Manager Report</th></tr>' + "\n")
+    report.write('<tr><td><b>Title</b></td><td><b>Artist</b></td><td><b>Album</b></td><td><b>Artwork</b></td></tr>' + "\n")
     for song in DB.allSongs():
         SONG_ID = song[0]
         SONG_GOOGLE_ID = stringify(song[1])
         SONG_TITLE = stringify(song[2])
         ALBUM_TITLE = stringify(DB.lookupAlbum(song[3]))
+        ALBUM_ART = stringify(DB.lookupAlbumArt(song[3]))
+        if ALBUM_ART != 'NULL':
+            ALBUM_ART_W = getDimensions(SONG_GOOGLE_ID, ALBUM_ART)[0]
+            ALBUM_ART_H = getDimensions(SONG_GOOGLE_ID, ALBUM_ART)[1]
         ARTIST_NAME = stringify(DB.lookupArtist(song[4]))
-        report.write('<tr><td>' + SONG_TITLE + '</td><td>' + ARTIST_NAME + '</td><td>' + ALBUM_TITLE + '</td></tr>')
+        ARTIST_ART = stringify(DB.lookupArtistArt(song[4]))
+        report.write('<tr><td>' + SONG_TITLE + '</td>'
+                     '<td>' + ARTIST_NAME + '</td>'
+                     '<td>' + ALBUM_TITLE + '</td>')
+        if ALBUM_ART != 'NULL':
+            report.write('<td><a href="' + ALBUM_ART + '"><img src="' + ALBUM_ART + '" width="200px" height="200px">'
+                         '<br/>' + str(ALBUM_ART_H) + 'x' + str(ALBUM_ART_W) + '</a></td></tr>' + "\n")
     report.write('</table></body></html>')
     report.close()
     initialise()
