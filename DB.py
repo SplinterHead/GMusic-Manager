@@ -70,6 +70,10 @@ def allSongs():
     db.execute('SELECT * FROM songs')
     return db.fetchall()
 
+def count(table):
+    db.execute('SELECT Count(*) FROM ' + table)
+    return str(db.fetchone()[0]) or None
+
 def lookupAlbum(album_id):
     db.execute('SELECT title FROM albums WHERE ID = ' + str(album_id))
     return db.fetchone()[0] or None
