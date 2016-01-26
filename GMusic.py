@@ -4,14 +4,15 @@ __author__ = 'Lewis England'
 import os
 import shutil
 import gmusicapi
+
 # Local Libraries
-import DB
 import DataFarmer
 import web.WebServer as webServer
+from config import *
 
 # Step 1: Log into GMusic
 api = gmusicapi.Mobileclient()
-api.login('xxxxx@gmail.com', '**********', gmusicapi.Mobileclient.FROM_MAC_ADDRESS)
+api.login(username, password, gmusicapi.Mobileclient.FROM_MAC_ADDRESS)
 
 # Step 2: Delete the previous covers folder to create a new one
 if os.path.exists('covers'):
@@ -29,6 +30,9 @@ print "Storing song data in database"
 for song in songs:
     DataFarmer.load(song)
 print "complete"
+
+## Log out of the MobileClient API
+api.logout()
 
 print "Writing report"
 webServer.generateReport()
