@@ -1,13 +1,14 @@
 __author__ = 'Lewis England'
 
 import sqlite3
+
 conn = sqlite3.connect(":memory:")
 db = conn.cursor()
 
 def createTables():
     # Create the database tables
     ## Artists
-    db.execute ('''CREATE TABLE artists (
+    db.execute('''CREATE TABLE artists (
     ID INTEGER PRIMARY KEY,
     G_ID TEXT,
     NAME TEXT,
@@ -15,24 +16,29 @@ def createTables():
     )''')
 
     ## Albums
-    db.execute ('''CREATE TABLE albums (
+    db.execute('''CREATE TABLE albums (
     ID INTEGER PRIMARY KEY,
     G_ID TEXT,
     TITLE TEXT,
-    ARTIST_ID INTEGER,
-    ART_URL TEXT,
     DISC_CNT INT,
-    TRACK_CNT INT
-    )''') #, cover_url, cover_width, cover_height, discs int)''' )
+    DISC_NO INTEGER,
+    TRACK_CNT INTEGER,
+    ARTIST_ID INTEGER,
+    ART_URL TEXT
+    )''')
 
     ## Songs
-    db.execute ('''CREATE TABLE songs (
+    db.execute('''CREATE TABLE songs (
     ID INTEGER PRIMARY KEY,
     G_ID TEXT,
+    TRACK_NO INTEGER,
     TITLE TEXT,
     ALBUM_ID INTEGER,
-    ARTIST_ID INTEGER
+    ARTIST_ID INTEGER,
+    DURATION INTEGER,
+    SIZE INTEGER
     )''')
+
     conn.commit()
 
 def findArtistId(artistName, gId, artworkUrl):
@@ -48,12 +54,12 @@ def findArtistId(artistName, gId, artworkUrl):
     else:
         return artist_id[0]
 
-def findAlbumId(albumName, artistId, gId, artworkUrl):
+def findAlbumId(albumName, discNo, trackCount, artistId, gId, artworkUrl):
     db.execute("SELECT ID FROM albums WHERE TITLE = ?",(albumName,))
     album_id = db.fetchone()
     if album_id is None:
-        db.execute('INSERT INTO albums (G_ID, TITLE, ARTIST_ID, ART_URL) VALUES (?,?,?,?)',
-                   (gId,albumName,artistId,artworkUrl,))
+        db.execute('INSERT INTO albums (G_ID, TITLE, DISC_NO, TRACK_CNT, ARTIST_ID, ART_URL) VALUES (?,?,?,?,?,?)',
+                   (gId,albumName,discNo,trackCount,artistId,artworkUrl,))
         conn.commit()
         db.execute('SELECT last_insert_rowid()')
         conn.commit()
@@ -61,9 +67,9 @@ def findAlbumId(albumName, artistId, gId, artworkUrl):
     else:
         return album_id[0]
 
-def addSong(gId, title, albumId, artistId):
-    db.execute('INSERT INTO songs (G_ID, TITLE, ALBUM_ID, ARTIST_ID) VALUES (?,?,?,?)',
-               (gId,title,albumId,artistId))
+def addSong(gId, trackNo, title, albumId, artistId, duration, size):
+    db.execute('INSERT INTO songs (G_ID, TRACK_NO, TITLE, ALBUM_ID, ARTIST_ID, DURATION, SIZE) VALUES (?,?,?,?,?,?,?)',
+               (gId,trackNo,title,albumId,artistId,duration,size))
     conn.commit()
 
 def allSongs():
@@ -76,6 +82,14 @@ def count(table):
 
 def lookupAlbum(album_id):
     db.execute('SELECT title FROM albums WHERE ID = ' + str(album_id))
+    return db.fetchone()[0] or None
+
+def lookupAlbumDiscNo(album_id):
+    db.execute('SELECT disc_no FROM albums WHERE ID = ' + str(album_id))
+    return db.fetchone()[0] or None
+
+def lookupAlbumTrackCount(album_id):
+    db.execute('SELECT track_cnt FROM albums WHERE ID = ' + str(album_id))
     return db.fetchone()[0] or None
 
 def lookupAlbumArt(album_id):

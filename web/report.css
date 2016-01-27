@@ -1,0 +1,8 @@
+body {
+    font-family: Sans-Serif;
+}
+
+.irregular_dimensions { background-color: grey; }
+.low_quality { background-color: red; }
+.med_quality { background-color: yellow; }
+.hi_quality { background-color: green; }

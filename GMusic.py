@@ -14,6 +14,11 @@ from config import *
 api = gmusicapi.Mobileclient()
 api.login(username, password, gmusicapi.Mobileclient.FROM_MAC_ADDRESS)
 
+## Will have to edit the gmusicapi to allow metadata changing for all keys
+#song = api.get_track_info(< some song['nid'] >)
+#song['rating'] = '1' # Set to thumbs down
+#api.change_song_metadata(song)
+
 # Step 2: Delete the previous covers folder to create a new one
 if os.path.exists('covers'):
     shutil.rmtree('covers')

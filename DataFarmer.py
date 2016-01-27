@@ -63,16 +63,21 @@ def load(song):
     # Using this internal ID, assign the album (or find the current ID if already exists)
     songAlbum = song['album'] or 'NULL'
     songAlbumId = 'NULL'
+    songAlbumDiscNo = song['discNumber'] or 0
+    songAlbumTrackCount = song['totalTrackCount'] or 0
     songAlbumArt = 'NULL'
 
     if 'albumId' in song:
         songAlbumId = song['albumId'] or 'NULL'
     if 'albumArtRef' in song:
         songAlbumArt = song['albumArtRef'][0]['url'] or 'NULL'
-    albumPyId = DB.findAlbumId(songAlbum, artistPyId, songAlbumId, songAlbumArt)
+    albumPyId = DB.findAlbumId(songAlbum, songAlbumDiscNo, songAlbumTrackCount, artistPyId, songAlbumId, songAlbumArt)
 
     # Finally, add the song itself to the DB
     songTitle = song['title'] or 'NULL'
     songId = song['id'] or 'NULL'
-    DB.addSong(songId, songTitle, albumPyId, artistPyId)
+    songTrackNo = song['trackNumber'] or 0
+    songDuration = song['durationMillis']
+    songSize = song['estimatedSize']
+    DB.addSong(songId, songTrackNo, songTitle, albumPyId, artistPyId, songDuration, songSize)
 
