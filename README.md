@@ -1,13 +1,13 @@
 GMusic Manager
 ==============
 
-Gives you an overview of your library with statistics such as:
-* Total artists, albums and songs
+Gives you an overview of your library with information such as:
+* Total artist, album and song counts
+* Album Art quality indicator
 
 ### TODO
 
 * Bitrate quality
-* Album Art quality
 
 In The Future
 =============
@@ -19,6 +19,7 @@ Automates some annoying things with Google Music.
 * Downloads high-quality artwork
 * Combines discs and adds metadata
 * Attempts to fill in missing metadata
+* Checks against lyric sites to look for explicit lyrics
 
 
 Dependencies
