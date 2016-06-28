@@ -48,7 +48,6 @@ def load(song):
         # 'clientId': 'KGuhQUzL9y/pYPgpeSNTxA',
         # 'durationMillis': '270000'
 
-    print song
     # Step 1: Add the artist / Find the artist in the DB and collect their ID
     songArtist = song['artist'] or 'NULL'
     songArtistId = 'NULL'

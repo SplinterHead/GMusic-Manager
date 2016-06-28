@@ -5,6 +5,7 @@ import sqlite3
 conn = sqlite3.connect(":memory:")
 db = conn.cursor()
 
+
 def createTables():
     # Create the database tables
     ## Artists
@@ -41,6 +42,7 @@ def createTables():
 
     conn.commit()
 
+
 def findArtistId(artistName, gId, artworkUrl):
     db.execute("SELECT ID FROM artists WHERE NAME = ?",(artistName,))
     artist_id = db.fetchone()
@@ -53,6 +55,7 @@ def findArtistId(artistName, gId, artworkUrl):
         return db.fetchone()[0]
     else:
         return artist_id[0]
+
 
 def findAlbumId(albumName, discNo, trackCount, artistId, gId, artworkUrl):
     db.execute("SELECT ID FROM albums WHERE TITLE = ?",(albumName,))
@@ -67,38 +70,47 @@ def findAlbumId(albumName, discNo, trackCount, artistId, gId, artworkUrl):
     else:
         return album_id[0]
 
+
 def addSong(gId, trackNo, title, albumId, artistId, duration, size):
     db.execute('INSERT INTO songs (G_ID, TRACK_NO, TITLE, ALBUM_ID, ARTIST_ID, DURATION, SIZE) VALUES (?,?,?,?,?,?,?)',
                (gId,trackNo,title,albumId,artistId,duration,size))
     conn.commit()
 
+
 def allSongs():
     db.execute('SELECT * FROM songs')
     return db.fetchall()
+
 
 def count(table):
     db.execute('SELECT Count(*) FROM ' + table)
     return str(db.fetchone()[0]) or None
 
+
 def lookupAlbum(album_id):
     db.execute('SELECT title FROM albums WHERE ID = ' + str(album_id))
     return db.fetchone()[0] or None
+
 
 def lookupAlbumDiscNo(album_id):
     db.execute('SELECT disc_no FROM albums WHERE ID = ' + str(album_id))
     return db.fetchone()[0] or None
 
+
 def lookupAlbumTrackCount(album_id):
     db.execute('SELECT track_cnt FROM albums WHERE ID = ' + str(album_id))
     return db.fetchone()[0] or None
+
 
 def lookupAlbumArt(album_id):
     db.execute('SELECT art_url FROM albums WHERE ID = ' + str(album_id))
     return db.fetchone()[0] or None
 
+
 def lookupArtist(artist_id):
     db.execute('SELECT name FROM artists WHERE ID = ' + str(artist_id))
     return db.fetchone()[0] or None
+
 
 def lookupArtistArt(artist_id):
     db.execute('SELECT art_url FROM artists WHERE ID = ' + str(artist_id))

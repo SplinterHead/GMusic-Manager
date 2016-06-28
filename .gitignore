@@ -60,3 +60,5 @@ target/
 # Other Files
 example-record
 index.html
+covers/
+web/templates/
