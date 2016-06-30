@@ -2,6 +2,10 @@ body {
     font-family: Sans-Serif;
 }
 
+#library_loading {
+    display: none;
+}
+
 .irregular_dimensions { background-color: grey; }
 .low_quality { background-color: red; }
 .med_quality { background-color: yellow; }

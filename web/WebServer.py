@@ -1,6 +1,7 @@
 import DB
+import GMusic
 import ImageHandler
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for, request
 
 
 app = Flask(__name__)
@@ -14,7 +15,8 @@ app.jinja_env.globals.update(
 
 
 @app.route('/')
-def generateIndex():
+def home():
+    GMusic.load_database()
     return render_template(
         'index.html',
         art_display_size='200',
@@ -22,7 +24,19 @@ def generateIndex():
         artist_count=DB.count('artists'),
         album_count=DB.count('albums'),
         all_songs=DB.allSongs()
-    )
+    ), 200, {'Cache-Control': 'no-cache, no-store', 'Pragma': 'no-cache'}
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        if GMusic.login_check(request.form['username'], request.form['password']):
+            print "Credentials check out"
+            return redirect(url_for('home'))
+        else:
+            error = 'Invalid Credentials. Please try again.'
+    return render_template('login.html', error=error)
 
 
 def runFlask():

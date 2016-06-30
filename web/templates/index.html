@@ -1,0 +1,29 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="static/style.css">
+    <script src="static/report.js"></script>
+    <title>GMusic Manager</title>
+</head>
+<body>
+    <div id="library_loading">
+        Loading...
+    </div>
+    <h1 id="library_statistics">You have {{ song_count }} songs by {{ artist_count }} artists over {{ album_count }} albums</h1>
+    <table border="1" id="library_content">
+        <tr>
+            <th>Title</th>
+            <th>Album</th>
+            <th>Artist</th>
+            <th>Artwork</th>
+        </tr>
+    {% for song in all_songs %}
+        <tr id="{{ song[1] }}">
+            <td>{{ song[3] }}</td>
+            <td>{{ lookup_album(song[4]) }}</td>
+            <td>{{ lookup_artist(song[5]) }}</td>
+            <td><img src="{{ lookup_albumart(song[4]) }}" width="{{ art_display_size }}px" height="{{ art_display_size }}px" /></td>
+        </tr>
+    {% endfor %}
+    </table>
+</body>
+</html>
