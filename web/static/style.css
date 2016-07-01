@@ -6,6 +6,10 @@ body {
     display: none;
 }
 
+img {
+    margin-bottom: 10px;
+}
+
 .irregular_dimensions { background-color: grey; }
 .low_quality { background-color: red; }
 .med_quality { background-color: yellow; }

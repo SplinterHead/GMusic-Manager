@@ -18,10 +18,13 @@
         </tr>
     {% for song in all_songs %}
         <tr id="{{ song[1] }}">
-            <td>{{ song[3] }}</td>
+            <td>
+                {{ song[3] }}<br/>
+                Track {{ song[2] }}/{{ lookup_trackcount(song[4]) }}<br />
+            </td>
             <td>{{ lookup_album(song[4]) }}</td>
             <td>{{ lookup_artist(song[5]) }}</td>
-            <td><img src="{{ lookup_albumart(song[4]) }}" width="{{ art_display_size }}px" height="{{ art_display_size }}px" /></td>
+            <td class="img_cell"><img src="{{ lookup_albumart(song[4]) }}" width="{{ art_display_size }}px" height="{{ art_display_size }}px" /></td>
         </tr>
     {% endfor %}
     </table>
