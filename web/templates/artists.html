@@ -1,0 +1,30 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <script src="/static/report.js"></script>
+    <title>GMusic Manager</title>
+</head>
+<body>
+    <div class="tabs">
+        <ul class="tab-links">
+            <li><a href="/">Albums</a></li>
+            <li class="active"><a href="/artists">Artists</a></li>
+            <li><a href="/songs">Songs</a></li>
+        </ul>
+    </div>
+    <div id="content">
+        <table>
+            <tr>
+            {% for artist in all_artists %}
+                <td id="{{ artist[0] }}" class="artist_info" background="{{ artist[3] }}" width="{{ artist_width }}px" height="{{ artist_height }}px">
+                    <a href="/info/artist?id={{ artist[0] }}">{{ artist[2] }}</a><br/>
+                </td>
+                {% if (artist[0] % 2) == 0 %}
+                </tr><tr>
+                {% endif %}
+            {% endfor %}
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

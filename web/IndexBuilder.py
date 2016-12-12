@@ -33,7 +33,7 @@ def getDimensions(song_hash, image):
     return size, None
 
 def implementTemplate():
-    return render_template('index.html',
+    return render_template('songs.html',
                            song_count=DB.count('songs'),
                            artist_count=DB.count('artists'),
                            album_count=DB.count('albums')
@@ -44,7 +44,7 @@ def generateReport():
     indexPage = '<h1>You have ' + DB.count('songs') + ' songs by ' + DB.count('artists') + ' artists over ' + DB.count('albums') + ' albums.</h1><br/>'
     indexPage += '<table border="1"><tr><th colspan="4">GMusic Manager Report</th></tr>'
     indexPage += '<tr><td><b>Title</b></td><td><b>Artist</b></td><td><b>Album</b></td><td><b>Artwork</b></td></tr>'
-    for song in DB.allSongs():
+    for song in DB.allData('songs'):
         SONG_ID = song[0]
         SONG_GOOGLE_ID = stringify(song[1])
         SONG_TRACK_NO = song[2]

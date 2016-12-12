@@ -1,0 +1,26 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <script src="/static/report.js"></script>
+    <title>GMusic Manager</title>
+</head>
+<body>
+    <div class="tabs">
+        <ul class="tab-links">
+            <li class="active"><a href="/"><- Back to Albums</a></li>
+        </ul>
+    </div>
+    <div id="content">
+        <div id="albumart"><img class="albumart" src="{{ lookup_albumart(album_id) }}" /></div>
+        <div id="album_info">
+            <h2>{{ album_data[2] }}</h2><br />
+            <h3>By: {{ lookup_artist(album_data[6]) }}</h3>
+            <br />
+            <br />
+            Tracklist:<br />
+            {% for track in tracklist %}
+                {{ track[2] }}. {{ track[3] }}<br />
+            {% endfor %}
+    </div>
+</body>
+</html>

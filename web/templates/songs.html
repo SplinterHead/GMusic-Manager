@@ -1,0 +1,31 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <script src="/static/report.js"></script>
+    <title>GMusic Manager</title>
+</head>
+<body>
+    <div class="tabs">
+        <ul class="tab-links">
+            <li><a href="/">Albums</a></li>
+            <li><a href="/artists">Artists</a></li>
+            <li class="active"><a href="/songs">Songs</a></li>
+        </ul>
+    </div>
+    <div id="content">
+        <table id="library_content">
+            <tr>
+            {% for song in all_songs %}
+                <td class="album,_info" id="{{ song[1] }}">
+                    <a href="/info/song?id={{ song[0] }}">{{ song[3] }}</a><br/>
+                    By: {{ lookup_artist(song[5]) }}
+                </td>
+                <td class="img_cell"><img class="albumart" src="{{ lookup_albumart(song[4]) }}" width="{{ art_display_size }}px" height="{{ art_display_size }}px" /></td>
+            {% if (song[0] % 3) == 0 %}
+            </tr><tr>
+            {% endif %}
+        {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

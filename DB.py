@@ -2,7 +2,15 @@ __author__ = 'Lewis England'
 
 import sqlite3
 
+## Set up sqlite to return dictionaries
+def dict_factory(cursor, row):
+    d = {}
+    for idx,col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+
 conn = sqlite3.connect(":memory:")
+##conn.row_factory = dict_factory
 db = conn.cursor()
 
 
@@ -39,8 +47,15 @@ def createTables():
     DURATION INTEGER,
     SIZE INTEGER
     )''')
-
     conn.commit()
+
+
+def isLoaded():
+    db.execute('SELECT * FROM songs')
+    if len(db.fetchall()) == 0:
+        return False
+    else:
+        return True
 
 
 def findArtistId(artistName, gId, artworkUrl):
@@ -77,14 +92,24 @@ def addSong(gId, trackNo, title, albumId, artistId, duration, size):
     conn.commit()
 
 
-def allSongs():
-    db.execute('SELECT * FROM songs')
+def allData(table):
+    db.execute("SELECT * FROM %s" % table)
     return db.fetchall()
 
 
 def count(table):
     db.execute('SELECT Count(*) FROM ' + table)
     return str(db.fetchone()[0]) or None
+
+
+def fetchDataById(table, table_id):
+    db.execute('SELECT * FROM %s WHERE ID = %s' % (table, table_id))
+    return db.fetchone() or None
+
+
+def fetchAlbumTracklist(album_id):
+    db.execute('SELECT * FROM songs WHERE album_id = ' + str(album_id) + ' ORDER BY TRACK_NO')
+    return db.fetchall() or None
 
 
 def lookupAlbum(album_id):

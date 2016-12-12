@@ -4,67 +4,70 @@ __author__ = 'Lewis England'
 import os
 import json
 import shutil
-import urllib2
+import socket
 import gmusicapi
+import os.path
 
 # Local Libraries
 import DataFarmer
 api = gmusicapi.Mobileclient()
 
+# Local vars
+REMOTE_SERVER = "www.google.com"
+CACHE_FILE = '.gmusiccache'
+OFFLINE_MODE = False
+
+
+def set_offline_mode(mode):
+    global OFFLINE_MODE
+    OFFLINE_MODE = mode
+
+
+def in_offline_mode():
+    global OFFLINE_MODE
+    return OFFLINE_MODE
+
+
+def internet_connection():
+    try:
+        host = socket.gethostbyname(REMOTE_SERVER)
+        s = socket.create_connection((host, 80), 2)
+        return True
+    except:
+        pass
+    return False
+
 
 def login_check(user, passw):
-    api.login(user, passw, gmusicapi.Mobileclient().FROM_MAC_ADDRESS)
-    if api.is_authenticated():
-        return True
+    if internet_connection():
+        api.login(user, passw, gmusicapi.Mobileclient().FROM_MAC_ADDRESS)
+        if api.is_authenticated():
+            return True
+        else:
+            return False
     else:
-        return False
+        return True
 
 
 def load_database():
-    songs = api.get_all_songs()
+    if internet_connection() and not in_offline_mode():
+        songs = api.get_all_songs()
+        if os.path.isfile(CACHE_FILE):
+            os.remove(CACHE_FILE)
+        cachefile = open(CACHE_FILE, 'w')
+        cache_content = json.dumps(songs).encode('utf-8')
+        cachefile.write(cache_content)
+        cachefile.close()
+        api.logout()
+    else:
+        ## In the case of no internet, we'll load the .cachefile
+        cachefile = open(CACHE_FILE, 'r')
+        cache_content = cachefile.read()
+        songs = json.loads(cache_content)
+        cachefile.close()
     for song in songs:
         DataFarmer.load(song)
-    api.logout()
 
-# Step 1: Delete the previous covers folder to create a new one
 if os.path.exists('covers'):
     shutil.rmtree('covers')
 os.mkdir('covers')
-
-# Step 2a: Log into GMusic - only when internet connected
-#if internet_on():
-#api = gmusicapi.Mobileclient()
-#api.login(username, password, gmusicapi.Mobileclient.FROM_MAC_ADDRESS)
-
-    ## Will have to edit the gmusicapi to allow metadata changing for all keys
-    #song = api.get_track_info(< some song['nid'] >)
-    #song['rating'] = '1' # Set to thumbs down
-    #api.change_song_metadata(song)
-
-    ## Collect list of songs with all the metadata
-#print "Downloading song library"
-#songs = api.get_all_songs()
-
-#cacheFile = open('library.json', 'w')
-#cacheFile.write(str(songs))
-#cacheFile.close()
-
-# Step 2b: Read the backup file created last time there was internet
-#    print "Reading library cache file"
-#    cacheFile = open('library.json')
-#    songs = json.loads(cacheFile.read())
-#    cacheFile.close()
-
-#print "done"
-
-## Load all songs into the manager database
-#print "Storing song data in database"
-#for song in songs:
-#    DataFarmer.load(song)
-#print "complete"
-
-## Log out of the MobileClient API
-#api.logout()
-
-#print "Writing report"
-#webServer.runFlask()

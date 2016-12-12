@@ -1,5 +1,7 @@
 body {
-    font-family: Sans-Serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    background-color: #ff5722;
 }
 
 #library_loading {
@@ -8,6 +10,65 @@ body {
 
 img {
     margin-bottom: 10px;
+}
+
+table {
+    padding-top: 20px;
+    padding-left: 20px;
+}
+
+.img_cell {
+    padding-right: 20px;
+}
+
+#content {
+    background-color: #FFF;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.tabs {
+    width:100%;
+    display:inline-block;
+}
+
+.tab-links {
+    margin-bottom: 1px;
+}
+
+.tab-links:after {
+    display:block;
+    clear:both;
+    content:'';
+}
+
+.tab-links li {
+    margin:0px 5px;
+    float:left;
+    list-style:none;
+}
+
+.tab-links a {
+    padding:9px 15px;
+    display:inline-block;
+    border-radius:3px 3px 0px 0px;
+    /*background:#7FB5DA;*/
+    background-color: rgba(255,255,255,0.32);
+    font-size:16px;
+    font-weight:600;
+    color:#4c4c4c;
+    transition:all linear 0.15s;
+    text-decoration: none;
+}
+
+.tab-links a:hover {
+    background-color: rgba(255,255,255,0.64);
+    text-decoration:none;
+}
+
+li.active a, li.active a:hover {
+    background:#fff;
+    color:#4c4c4c;
 }
 
 .irregular_dimensions { background-color: grey; }
