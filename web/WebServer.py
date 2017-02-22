@@ -84,10 +84,12 @@ def artist_info():
     artist_id = request.args['id']
     try:
         artist_data = DB.fetchDataById('artists', artist_id)
+        #artist_albums = DB.getAlbums(artist_id)
         return render_template(
             'artist_info.html',
             artist_id=artist_id,
             artist_data=artist_data,
+            all_albums_by_artist=DB.fetchArtistAlbums(artist_id)
         ), 200, {'Cache-Control': 'no-cache, no-store', 'Pragma': 'no-cache'}
     except:
         error = "Woops. No artist with that ID found in the database"

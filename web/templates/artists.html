@@ -17,7 +17,7 @@
             <tr>
             {% for artist in all_artists %}
                 <td id="{{ artist[0] }}" class="artist_info" background="{{ artist[3] }}" width="{{ artist_width }}px" height="{{ artist_height }}px">
-                    <a href="/info/artist?id={{ artist[0] }}">{{ artist[2] }}</a><br/>
+                    <div class="label-overlay"><a href="/info/artist?id={{ artist[0] }}">{{ artist[2] }}</a></div><br/>
                 </td>
                 {% if (artist[0] % 2) == 0 %}
                 </tr><tr>

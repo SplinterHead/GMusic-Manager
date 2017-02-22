@@ -112,6 +112,11 @@ def fetchAlbumTracklist(album_id):
     return db.fetchall() or None
 
 
+def fetchArtistAlbums(artist_id):
+    db.execute('SELECT * FROM albums WHERE ARTIST_ID = ' + str(artist_id))
+    return db.fetchall() or None
+
+
 def lookupAlbum(album_id):
     db.execute('SELECT title FROM albums WHERE ID = ' + str(album_id))
     return db.fetchone()[0] or None

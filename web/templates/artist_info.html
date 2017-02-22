@@ -13,6 +13,13 @@
     <div id="content">
         <div id="artistart"><img class="artistart" src="{{ artist_data[3] }}" />
         <div id="artist_info"><h2>{{ artist_data[2] }}</h2></div><br />
+        <div id="artist_albums">
+        {% for album in all_albums_by_artist %}
+            <div id="artist_album">
+                <a href="/info/album?id={{ album[0] }}">{{ album[2] }}</a><br />
+                <img class="albumart" src="{{ album[7] }}" width="{{ art_display_size }}px" height="{{ art_display_size }}px" />
+            </div>
+        {% endfor %}
         </div>
     </div>
 </body>

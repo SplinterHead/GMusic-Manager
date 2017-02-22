@@ -63,12 +63,17 @@ table {
 
 .tab-links a:hover {
     background-color: rgba(255,255,255,0.64);
-    text-decoration:none;
+    text-decoration: none;
 }
 
 li.active a, li.active a:hover {
-    background:#fff;
-    color:#4c4c4c;
+    background: #fff;
+    color: #4c4c4c;
+}
+
+.label-overlay {
+    background-color: white;
+    opacity: 0.6;
 }
 
 .irregular_dimensions { background-color: grey; }
